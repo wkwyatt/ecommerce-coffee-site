@@ -1,0 +1,51 @@
+extends layout
+
+block content
+
+	#choices.container
+		#plan-wrapper
+			#choices-header Tell us what you want
+			#choices-subheader Shipping is free and you can ship any week
+			form(name="choices-form", action="/choices", method="post")
+				#choice-frequency.choice-block
+					.row
+						.choice-image.col-sm-6
+							img(src="/images/calendar.png")
+						.col-sm-6
+							h1.choice-label 1. Frequency
+							.choice-lower-text-wrapper
+								.choice-lower-text How often would you like us to send you your coffee
+								select#frequency.form-control(name="frequency")
+									option(value="weekly" selected=(frequency == 'weekly')) Weekly
+									option(value="biweekly" selected=(frequency == 'biweekly')) Every Two Weeks
+									option(value="monthly" selected=(frequency == 'monthly')) Monthly
+									option(value="quarterly" selected=(frequency == 'quarterly')) Quarterly
+									option(value="semiannually" selected=(frequency == 'semiannually')) Semi-Annually
+									option(value="annually" selected=(frequency == 'annually')) Annually
+								.choice-help-text You can cancel anytime.  You can skip anytime.
+				#choice-quantity.choice-block
+					.row
+						.choice-image.col-sm-6
+							img(src="/images/food-scale.png")
+						.col-sm-6
+							h1.choice-label 1. Quantity
+							.choice-lower-text-wrapper 
+								.choice-lower-text How many pounds (in increments of .25 lb) would you like each delivery?
+									input(type="number", name="quarterPounds", value="#{pounds}", step=".25", min="0")
+								.choice-help-text You can cancel anytime.  You can skip anytime.
+				#choice-grind.choice-block
+					.row
+						.choice-image.col-sm-6
+							img(src="/images/beans.png")
+						.col-sm-6
+							h1.choice-label 1. Grind Type
+							.choice-lower-text-wrapper
+								.choice-lower-text How do you like your grinds?
+								select#grinds.form-control(name="grind")
+									each item in grindSelect
+										if (item.val == grind)
+											option(value="#{item.val}" selected="selected") #{item.text}
+										else 
+											option(value="#{item.val}") #{item.text}
+								.choice-help-text You can cancel anytime.  You can skip anytime.
+				input.btn.btn-primary.btn-lg(type="submit", name="submit")

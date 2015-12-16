@@ -2,3 +2,27 @@
 // _DELIVERY.SCSS
 // Delivery View Styles
 // -------------------------------
+
+#delivery {
+	#delivery-wrapper {
+		#delivery-address-form {
+			border: 1px solid darken($cream, 10%);
+			border-radius: 5px;
+			margin: 30px auto;
+			padding: 30px;
+			input {
+				width: 60%;
+			}
+			.delivery-input-subhead {
+				color: lighten(#000, 65%);
+			}
+			#zipcode {
+				width: 120px;
+			}
+			#delivery-date {
+				width: 120px;
+
+			}
+		}
+	}
+}
