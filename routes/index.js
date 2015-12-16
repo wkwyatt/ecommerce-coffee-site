@@ -35,7 +35,7 @@ router.post('/register', function(req, res) {
         	console.log(req.user);
         	console.log('===================')
             req.session.username = req.body.username;
-            res.render('index', { username : req.session.username });
+            res.render('choices', { username : req.session.username });
         });
     });
 });
@@ -48,7 +48,7 @@ router.get('/login', function(req, res) {
 
     //the user is already logged in
     if(req.session.username){
-        res.redirect('/index');
+        res.redirect('/choices');
     }
     //req.query.login pulls the query parameters right out of the http headers!
     //They are here and failed a login
@@ -70,32 +70,131 @@ router.post('/login', function(req, res, next) {
           return res.redirect('/login?failedlogin=1');
         }
         if (user){
-            // Passport session setup.
-            passport.serializeUser(function(user, done) {
-              console.log("serializing " + user.username);
-              done(null, user);
-            });
-
-            passport.deserializeUser(function(obj, done) {
-              console.log("deserializing " + obj);
-              done(null, obj);
-            });        
             req.session.username = user.username;
         }
 
-        return res.redirect('/');
+        return res.redirect('/choices');
       })(req, res, next);
+
 });
 
 /* ---------------------------- */
 /* ----------Logout----------- */
 /* ---------------------------- */
 router.get('/logout', function(req, res) {
-    req.logout();
     req.session.destroy();
     res.redirect('/');
+});
+
+/* ---------------------------- */
+/* ----------CHOICES GET----------- */
+/* ---------------------------- */
+router.get('/choices', function (req, res, next){
+	//Make sure the user is logged in!!
+	if(req.session.username){
+		//They do belong here. Proceed with page
+		//Check and see if they have any set preferences already.
+		Account.findOne(
+			{ username: req.session.username },
+			function (err, doc){
+				var currGrind = doc.grind ? doc.grind : undefined
+			});
+
+		//Render the choices view
+		res.render('choices');
+	}else{
+		res.redirect('/');
+	}
+});
+
+router.post('/choices', function (req, res, next){
+	//Is the dude at the keyboard logged in
+	if(req.session.username){
+		Account.findOne({username: req.session.username},
+		function (err, doc){
+
+			//when data exists, find it here.
+			var grind = doc.grind;
+			var frequency = doc.frequency;
+			var pounds = doc.quarterPounds;
+
+		});
+
+		var newGrind = req.body.grind;
+		var newFrequency = req.body.frequency;
+		var newPounds = req.body.quarterPounds;
+
+		Account.findOneAndUpdate(
+			{ username: req.session.username },
+			{ grind: newGrind },
+			{ upsert: true },
+			function (err, account){
+				if (err) {
+					res.send('There was an error saving your preferences. Please re-enter or send this error to our help team: ' + err );
+				}else{
+					console.log("----------")
+					console.log(account)
+					console.log("----------")
+					account.save;
+				}
+			}
+		)
+
+		Account.findOneAndUpdate(
+			{ username: req.session.username },
+			{ frequency: newFrequency },
+			{ upsert: true },
+			function (err, account){
+				if (err) {
+					res.send('There was an error saving your preferences. Please re-enter or send this error to our help team: ' + err );
+				}else{
+					console.log("----------")
+					console.log(account)
+					console.log("----------")
+					account.save;
+				}
+			}
+		)
+
+		Account.findOneAndUpdate(
+			{ username: req.session.username },
+			{ pounds: newPounds },
+			{ upsert: true },
+			function (err, account){
+				if (err) {
+					res.send('There was an error saving your preferences. Please re-enter or send this error to our help team: ' + err );
+				}else{
+					console.log("----------")
+					console.log(account)
+					console.log("----------")
+					account.save;
+				}
+			}
+		)
+
+		res.redirect('/delivery');
+	}	
+});
+
+router.get('/delivery', function (req, res, next){
+	res.send("<h1>Welcome to the delivery page.</h1>")
 });
 
 
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
