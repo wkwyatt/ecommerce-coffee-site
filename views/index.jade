@@ -1,5 +1,13 @@
 extends layout
+extends header
+
 
 block content
-  h1= title
-  p Welcome to #{title}
+	if (!user)
+		#header.logged-in
+			#header-inner.container
+				#header-text-wrapper
+					h1#header-text A better way to grind.
+					p#header-sub-text Freshly roasted coffee beans delivered weekly to your door.
+	if (user)
+		#header.annon
