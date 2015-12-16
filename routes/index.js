@@ -178,8 +178,45 @@ router.post('/choices', function (req, res, next){
 
 router.get('/delivery', function(req, res, next){
 
-    res.render("delivery");
+    res.render("delivery", { username: req.session.username });
 
 }); 
+
+router.post('/delivery', function (req, res, next){
+    if (req.session.username) {
+        var fullName = req.body.name;
+        var addressOne = req.body.address1;
+        var addressTwo = req.body.address2;
+        var newCity = req.body.city;
+        var state = req.body.state;
+        var zipcode = req.body.zip;
+        var deliveryDate = req.body.deliveryDate 
+
+        console.log(fullName);
+        console.log("===fullname===");
+        Account.findOneAndUpdate(
+            { username: req.session.username },
+            { 
+                fullName : fullName,
+                addressOne : addressOne,
+                addressTwo : addressTwo,
+                newCity : newCity,
+                state : state,
+                zipcode : zipcode,
+                deliveryDate : deliveryDate
+            }, 
+            { upsert: true },
+            function (err, acct){
+                if(err){
+                    res.send("There was an error saving your preferences.  Please re-enter or send this error to your help team!");
+                } else {
+                    acct.save;
+                    res.redirect('/payment');
+                }
+        });
+    } else {
+        res.redirect('/');
+    }
+});
 
 module.exports = router;

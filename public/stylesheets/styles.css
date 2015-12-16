@@ -663,10 +663,6 @@ h2.how-it-works_label {
   color: #a6a6a6;
 }
 /* line 19, ../../compass/sass/views/_delivery.scss */
-#delivery #delivery-wrapper #delivery-address-form #zipcode {
-  width: 120px;
-}
-/* line 22, ../../compass/sass/views/_delivery.scss */
-#delivery #delivery-wrapper #delivery-address-form #delivery-date {
+#delivery #delivery-wrapper #delivery-address-form #zipcode, #delivery #delivery-wrapper #delivery-address-form #delivery-date, #delivery #delivery-wrapper #delivery-address-form select {
   width: 120px;
 }

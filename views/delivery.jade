@@ -6,7 +6,7 @@ block content
 		#delivery-wrapper
 			h1#delivery-header Please enter your shipping info
 			h4#delivery-subheader We treat your coffee like gold.  Like black gold(not Texas tea).  It will be shipped safely and is guarenteed.
-			form#delivery-address-form.form-group
+			form#delivery-address-form.form-group(name="delivery-form", action="/delivery", method="post")
 				h2 Address
 				h4 Full Name
 				input.form-control(placeholder="Full Name" name="name")
@@ -21,9 +21,62 @@ block content
 				input.form-control(placeholder="City" name="city")
 				p.delivery-input-subhead City, town, etc.
 				h4 State / Province / Region
-				input.form-control(placeholder="Full Name")
+				select.form-control(name='state')
+					option(value='', selected='selected') Select a State
+					option(value='AL') Alabama
+					option(value='AK') Alaska
+					option(value='AZ') Arizona
+					option(value='AR') Arkansas
+					option(value='CA') California
+					option(value='CO') Colorado
+					option(value='CT') Connecticut
+					option(value='DE') Delaware
+					option(value='DC') District Of Columbia
+					option(value='FL') Florida
+					option(value='GA') Georgia
+					option(value='HI') Hawaii
+					option(value='ID') Idaho
+					option(value='IL') Illinois
+					option(value='IN') Indiana
+					option(value='IA') Iowa
+					option(value='KS') Kansas
+					option(value='KY') Kentucky
+					option(value='LA') Louisiana
+					option(value='ME') Maine
+					option(value='MD') Maryland
+					option(value='MA') Massachusetts
+					option(value='MI') Michigan
+					option(value='MN') Minnesota
+					option(value='MS') Mississippi
+					option(value='MO') Missouri
+					option(value='MT') Montana
+					option(value='NE') Nebraska
+					option(value='NV') Nevada
+					option(value='NH') New Hampshire
+					option(value='NJ') New Jersey
+					option(value='NM') New Mexico
+					option(value='NY') New York
+					option(value='NC') North Carolina
+					option(value='ND') North Dakota
+					option(value='OH') Ohio
+					option(value='OK') Oklahoma
+					option(value='OR') Oregon
+					option(value='PA') Pennsylvania
+					option(value='RI') Rhode Island
+					option(value='SC') South Carolina
+					option(value='SD') South Dakota
+					option(value='TN') Tennessee
+					option(value='TX') Texas
+					option(value='UT') Utah
+					option(value='VT') Vermont
+					option(value='VA') Virginia
+					option(value='WA') Washington
+					option(value='WV') West Virginia
+					option(value='WI') Wisconsin
+					option(value='WY') Wyoming
 				h4 Zip Code
-				input#zipcode.form-control(placeholder="Zip Code" name="zip" type="number" maxlength="5")
+				input#zipcode.form-control(placeholder="Zip Code", name="zip", type="number", maxlength="5")
 				h4 Date of next delivery (this will be your first delivery if you are just signing up)
-				input#delivery-date.form-control(placeholder="" name="deliveryDate")
+				input#delivery-date.form-control(placeholder="", name="deliveryDate")
+				input.btn.btn-primary.btn-lg(type="submit", name="submit")
 			

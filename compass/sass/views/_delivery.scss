@@ -16,12 +16,8 @@
 			.delivery-input-subhead {
 				color: lighten(#000, 65%);
 			}
-			#zipcode {
+			#zipcode, #delivery-date, select {
 				width: 120px;
-			}
-			#delivery-date {
-				width: 120px;
-
 			}
 		}
 	}
