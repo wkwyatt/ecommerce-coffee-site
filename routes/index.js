@@ -5,7 +5,7 @@ var Account = require('../models/account');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function (req, res) {
+router.get('/', function (req, res, next) {
     //res.send(req.session);
     res.render('index', { username : req.session.username });
 });
@@ -22,11 +22,18 @@ router.get('/register', function(req, res) {
 //Post to the register page
 router.post('/register', function(req, res) {
     //The mongo statement to insert the new vars into the db
-    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-        if (err) {
-            return res.render('register', { err : err });
-        }
+    Account.register(new Account(
+    		{ username : req.body.username }
+    	), 
+    	req.body.password, 
+    	function(err, account) {
+	        if (err) {
+	            return res.render('register', { err : err });
+	        }
         passport.authenticate('local')(req, res, function () {
+        	console.log('=========user object========')
+        	console.log(req.user);
+        	console.log('===================')
             req.session.username = req.body.username;
             res.render('index', { username : req.session.username });
         });
@@ -41,7 +48,7 @@ router.get('/login', function(req, res) {
 
     //the user is already logged in
     if(req.session.username){
-        res.redirect('/choices');
+        res.redirect('/index');
     }
     //req.query.login pulls the query parameters right out of the http headers!
     //They are here and failed a login
@@ -49,23 +56,11 @@ router.get('/login', function(req, res) {
         res.render('login', { failed : "Your username or password is incorrect." });    
     }
     //They are here and aren't logged in
-    res.render('login', { user : req.user });
-}).post('/login', function(req, res, next) {
+    res.render('login', { });
+})
 
-    if(req.body.getStarted){
-        Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-            if (err) {
-                return res.render('register', { err : err });
-            }
-            if(!err)
-            passport.authenticate('local')(req, res, function () {
-                req.session.username = req.body.username;
-                res.render('choices', { username : req.session.username });
-            });
-        });        
-    }
+router.post('/login', function(req, res, next) {
 
-    if (!req.body.getStarted){
       passport.authenticate('local', function(err, user, info) {
         if (err) {
           return next(err); // will generate a 500 error
@@ -88,9 +83,8 @@ router.get('/login', function(req, res) {
             req.session.username = user.username;
         }
 
-        return res.redirect('/choices');
+        return res.redirect('/');
       })(req, res, next);
-    }
 });
 
 /* ---------------------------- */
