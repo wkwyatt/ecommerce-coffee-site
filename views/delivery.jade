@@ -1,0 +1,102 @@
+extends layout
+
+
+block content
+	include datepicker.html
+	.container
+		#plan-wrapper
+			h1 Please enter your shipping info
+			p.lead We treat your coffee like gold. Like black gold (not Texas tea). It will be shipped safely and is guarenteed.
+			form(role='form', action="/delivery",method="post")
+				.form-inner
+					h2 Address
+					.form-group.form-lg
+						label.control-label Full Name
+						.controls
+							input.form-control(id="full-name" name="fullName" type="text" placeholder="Full Name" value=fullName)
+							p.help-block Full Name
+					.form-group.form-lg
+						label.control-label Address Line 1
+						.controls
+							input.form-control(id="address-line1" name="address1" type="text" placeholder="Address Line 1" value=address1)
+							p.help-block Street address, P.O. box, company name, c/o
+					.form-group.form-lg
+						label.control-label Address Line 2
+						.controls
+							input.form-control(id="address-line2" name="address2" type="text" placeholder="Address Line 2" value=address2)
+							p.help-block Apartment, suite , unit, building, floor, etc.
+					.form-group.form-lg
+						label.control-label City
+						.controls
+							input.form-control(id="city" name="city" type="text" placeholder="City" value=city)
+							p.help-block City, town, etc.
+					.form-group.form-lg
+						label.control-label State / Province / Region
+						.controls
+							select.form-control(id="state" name="state" value=state)
+								option(value="AL") Alabama
+								option(value="AK") Alaska
+								option(value="AZ") Arizona
+								option(value="AR") Arkansas
+								option(value="CA") California
+								option(value="CO") Colorado
+								option(value="CT") Connecticut
+								option(value="DE") Delaware
+								option(value="DC") District Of Columbia
+								option(value="FL") Florida
+								option(value="GA") Georgia
+								option(value="HI") Hawaii
+								option(value="ID") Idaho
+								option(value="IL") Illinois
+								option(value="IN") Indiana
+								option(value="IA") Iowa
+								option(value="KS") Kansas
+								option(value="KY") Kentucky
+								option(value="LA") Louisiana
+								option(value="ME") Maine
+								option(value="MD") Maryland
+								option(value="MA") Massachusetts
+								option(value="MI") Michigan
+								option(value="MN") Minnesota
+								option(value="MS") Mississippi
+								option(value="MO") Missouri
+								option(value="MT") Montana
+								option(value="NE") Nebraska
+								option(value="NV") Nevada
+								option(value="NH") New Hampshire
+								option(value="NJ") New Jersey
+								option(value="NM") New Mexico
+								option(value="NY") New York
+								option(value="NC") North Carolina
+								option(value="ND") North Dakota
+								option(value="OH") Ohio
+								option(value="OK") Oklahoma
+								option(value="OR") Oregon
+								option(value="PA") Pennsylvania
+								option(value="RI") Rhode Island
+								option(value="SC") South Carolina
+								option(value="SD") South Dakota
+								option(value="TN") Tennessee
+								option(value="TX") Texas
+								option(value="UT") Utah
+								option(value="VT") Vermont
+								option(value="VA") Virginia
+								option(value="WA") Washington
+								option(value="WV") West Virginia
+								option(value="WI") Wisconsin
+								option(value="WY") Wyoming
+					.form-group.form-sm
+						label.control-label Zip Code
+						.controls
+							input.form-control(id="zip" name="zip" type="text" placeholder="Zip Code" value=zip)
+							.help-block
+					.form-group.form-sm
+						label.control-label Date of next delivery (this will be your first delivery if you are just signing up)
+						.controls
+							input.form-control(type='text', name='mdate', id='datepicker' value=nextDelivery)
+
+				input.btn.btn-primary.btn-lg(type="submit", name="submit" id="delivery-payment")
+
+
+
+
