@@ -20,3 +20,10 @@ $blue_lt:   #bddffd;
 
 $green_lt:  #196D46;
 $green_dk:  #294741;
+
+@mixin sectionWrapper($borderColor) {
+	border: 1px solid darken($borderColor, 10%);
+	border-radius: 5px;
+	margin: 30px auto;
+	padding: 30px;
+}

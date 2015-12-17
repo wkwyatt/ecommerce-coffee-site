@@ -1,8 +1,10 @@
 var express = require('express');
 var passport = require('passport');
+var nodeMailer = require('nodemailer');
 //Require our account.js file which resides in models one dir up
 var Account = require('../models/account');
 var router = express.Router();
+var vars = require('../config/vars.json');
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -177,8 +179,34 @@ router.post('/choices', function (req, res, next){
 });
 
 router.get('/delivery', function(req, res, next){
+    if (req.session.username) {
+        Account.findOne({ username: req.session.username },
+            function (err, doc){
+                var currFullName = doc.fullName ? doc.fullName : undefined;
+                var currAddressOne = doc.addressOne ? doc.addressOne : undefined;
+                var currAddressTwo = doc.addressTwo ? doc.addressTwo : undefined;
+                var currNewCity = doc.newCity ? doc.newCity : undefined;
+                var currState = doc.state ? doc.state : undefined;
+                var currZipcode = doc.zipcode ? doc.zipcode : undefined;
+                var currDeliveryDate = doc.deliveryDate ? doc.deliveryDate : undefined; 
 
-    res.render("delivery", { username: req.session.username });
+                console.log(currNewCity);
+                console.log("==index==");
+                res.render('delivery', {
+                    username: req.session.username,
+                    fullName : currFullName,
+                    addressOne : currAddressOne,
+                    addressTwo : currAddressTwo,
+                    city : currNewCity,
+                    state : currState,
+                    zipcode : currZipcode,
+                    deliveryDate : currDeliveryDate
+    
+                });
+            });
+    } else {
+        res.redirect("/");
+    }
 
 }); 
 
@@ -219,4 +247,51 @@ router.post('/delivery', function (req, res, next){
     }
 });
 
+router.get('/myaccount', function (req, res, next){
+    if (req.session.username) {
+        Account.findOne({ username: req.session.username },
+            function (err, doc){
+                var currFullName = doc.fullName ? doc.fullName : undefined;
+                var currAddressOne = doc.addressOne ? doc.addressOne : undefined;
+                var currAddressTwo = doc.addressTwo ? doc.addressTwo : undefined;
+                var currNewCity = doc.newCity ? doc.newCity : undefined;
+                var currState = doc.state ? doc.state : undefined;
+                var currZipcode = doc.zipcode ? doc.zipcode : undefined;
+                var currDeliveryDate = doc.deliveryDate ? doc.deliveryDate : undefined; 
+                var currGrind = doc.grind ? doc.grind : undefined;
+                var currFrequency = doc.frequency ? doc.frequency : undefined;
+                var currPounds = doc.pounds ? doc.pounds : undefined;
+
+                res.render('account', {
+                    username: req.session.username,
+                    fullName : currFullName,
+                    addressOne : currAddressOne,
+                    addressTwo : currAddressTwo,
+                    city : currNewCity,
+                    state : currState,
+                    zipcode : currZipcode,
+                    deliveryDate : currDeliveryDate,
+                    grind: currGrind,
+                    frequency: currFrequency,
+                    pounds: currPounds
+                });
+            });
+    } else {
+        res.redirect("/");
+    }
+})
+
+router.get('/payment', function (req, res, next){
+    res.render('payment');
+});
+
+router.get('/email', function (req, res, next){
+    var transporter = nodeMailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: vars.email,
+            pass: vars.password
+        }
+    })
+})
 module.exports = router;

@@ -24,6 +24,14 @@ body {
   color: #dc0707;
 }
 
+/* line 30, ../../compass/sass/layout/_layout.scss */
+.section {
+  border: 1px solid #d8d3c8;
+  border-radius: 5px;
+  margin: 30px auto;
+  padding: 30px;
+}
+
 /* line 6, ../../compass/sass/layout/_header.scss */
 #header {
   background: url('../images/CupInBeans.jpg?1450276259') no-repeat center;
@@ -648,21 +656,37 @@ h2.how-it-works_label {
 }
 
 /* line 8, ../../compass/sass/views/_delivery.scss */
-#delivery #delivery-wrapper #delivery-address-form {
+#delivery #delivery-wrapper #delivery-address-form-wrapper {
   border: 1px solid #d8d3c8;
   border-radius: 5px;
   margin: 30px auto;
   padding: 30px;
 }
-/* line 13, ../../compass/sass/views/_delivery.scss */
-#delivery #delivery-wrapper #delivery-address-form input {
+/* line 10, ../../compass/sass/views/_delivery.scss */
+#delivery #delivery-wrapper #delivery-address-form-wrapper input {
   width: 60%;
 }
-/* line 16, ../../compass/sass/views/_delivery.scss */
-#delivery #delivery-wrapper #delivery-address-form .delivery-input-subhead {
+/* line 13, ../../compass/sass/views/_delivery.scss */
+#delivery #delivery-wrapper #delivery-address-form-wrapper .delivery-input-subhead {
   color: #a6a6a6;
 }
-/* line 19, ../../compass/sass/views/_delivery.scss */
-#delivery #delivery-wrapper #delivery-address-form #zipcode, #delivery #delivery-wrapper #delivery-address-form #delivery-date, #delivery #delivery-wrapper #delivery-address-form select {
+/* line 16, ../../compass/sass/views/_delivery.scss */
+#delivery #delivery-wrapper #delivery-address-form-wrapper #zipcode, #delivery #delivery-wrapper #delivery-address-form-wrapper #delivery-date, #delivery #delivery-wrapper #delivery-address-form-wrapper select {
   width: 120px;
+}
+
+/* line 8, ../../compass/sass/views/_account.scss */
+#account #account-choices-header a, #account #account-delivery-info-header a {
+  font-size: 14px;
+  margin-left: 50px;
+}
+/* line 13, ../../compass/sass/views/_account.scss */
+#account #account-grind-labels, #account #account-delivery-labels {
+  display: inline-block;
+  width: 200px;
+  margin-right: 35px;
+}
+/* line 18, ../../compass/sass/views/_account.scss */
+#account #account-grind-uservals, #account #account-delivery-uservals {
+  display: inline-block;
 }

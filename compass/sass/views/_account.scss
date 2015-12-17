@@ -2,3 +2,20 @@
 // _ACCOUNT.SCSS
 // Account View Styles
 // -------------------------------
+
+#account {
+	#account-choices-header, #account-delivery-info-header {
+		a {
+			font-size: 14px;
+			margin-left: 50px;
+		}
+	}
+	#account-grind-labels, #account-delivery-labels, {
+		display: inline-block;
+		width: 200px;
+		margin-right: 35px;
+	}
+	#account-grind-uservals, #account-delivery-uservals {
+		display: inline-block;
+	}
+}
