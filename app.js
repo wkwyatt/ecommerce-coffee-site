@@ -13,7 +13,7 @@ var session = require('express-session')
 var mongoUrl = 
   process.env.MONGOLAB_URI ||
   process.env.MONGOLAB_URL ||
-  'mongo://localhost:27017/ecommerce';
+  'mongodb://localhost:27017/coffee';
 mongoose.connect(mongoUrl);
 
 var routes = require('./routes/index');
@@ -49,7 +49,7 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 //Mongoose
-mongoose.connect('mongodb://localhost:27017/ecommerce')
+// mongoose.connect('mongodb://localhost:27017/ecommerce')
 
 app.use('/', routes);
 app.use('/users', users);
