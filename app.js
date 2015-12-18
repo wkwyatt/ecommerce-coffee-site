@@ -10,6 +10,11 @@ var passportLocal = require('passport-local');
 var LocalStrategy = passportLocal.Strategy;
 var session = require('express-session')
 
+var mongoUrl = 
+  process.env.MONGOLAB_URI ||
+  process.env.MONGOLAB_URL ||
+  'mongo://localhost:27017/ecommerce';
+mongoose.connect(mongoUrl);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');

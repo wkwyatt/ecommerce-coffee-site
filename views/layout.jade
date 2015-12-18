@@ -25,19 +25,49 @@ html
 						#nav-log-in Welcome,
 							a(href="/myaccount") #{username}
 							a.btn.btn-primary(href="/logout") Logout
+<<<<<<< HEAD
 							if (accessLevel)
+||||||| merged common ancestors
+=======
+							if (accessLevel)
+								a.btn.btn-warning(href="/admin") Admin
+>>>>>>> master
 
 		if (username)
 			#signup-wrapper
 				.container
 					ul.signup-progress
+<<<<<<< HEAD
 						li(class=(menuItem == "home" ? "active" : ""))
+||||||| merged common ancestors
+						li
+=======
+						li(class=(menuItem === 'welcome')? "active" : "")
+>>>>>>> master
 							a(href="/").welcome 1. Welcome
+<<<<<<< HEAD
 						li(class=(menuItem == "choices" ? "active" : ""))
+||||||| merged common ancestors
+						li.active
+=======
+						li(class=(menuItem === 'options')? "active" : "")
+>>>>>>> master
 							a(href="/choices").options 2. Options
+<<<<<<< HEAD
 						li(class=(menuItem == "delivery" ? "active" : ""))
+||||||| merged common ancestors
+						li
+=======
+						li(class=(menuItem === 'delivery')? "active" : "")
+>>>>>>> master
 							a(href="/delivery").delivery  3. Delivery
+<<<<<<< HEAD
 						li(class=(menuItem == "payment" ? "active" : ""))
+||||||| merged common ancestors
+						li
+=======
+						li(class=(menuItem === 'payment')? "active" : "")
+>>>>>>> master
 							a(href="/payment").payment 4. Payment
 
 		block content

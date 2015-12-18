@@ -1,5 +1,11 @@
 node_modules/*
+<<<<<<< HEAD
 
 *.scssc
 
 config/*
+||||||| merged common ancestors
+=======
+
+*.scssc
+>>>>>>> master
