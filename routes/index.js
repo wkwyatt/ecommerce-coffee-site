@@ -19,7 +19,37 @@ router.get('/', function (req, res) {
 
 // Get the register page
 router.get('/register', function(req, res) {
-    res.render('register', { });
+     if(req.session.username) {
+        Account.findOne({ username: req.session.username },
+            function (err, doc){
+                // Ternary statement 
+                // same as if / else statement evaluating 'doc.grind'
+                // if true then set the value of 'currGrind' to doc.grind
+                // otherwise set the value of 'currGrind' to undefined
+                var currGrind = doc.grind ? doc.grind : undefined;
+                var currFrequency = doc.frequency ? doc.frequency : undefined;
+                var currPounds = doc.pounds ? doc.pounds : undefined;
+
+                // Render the choices view
+                res.render('choices', { 
+                    username: req.session.username,
+                    menuItem: "choices",
+                    accessLevel: req.session.accessLevel,
+                    grind: currGrind,
+                    frequency: currFrequency,
+                    pounds: currPounds,
+                    grindSelect: [
+                        { val:"extraCourse", text:"Extra Course" },
+                        { val:"mediumCourse", text:"Medium Course" },
+                        { val:"course", text:"Course" },
+                        { val:"fine", text:"Fine" },
+                        { val:"veryFine", text:"Very Fine"}
+                    ]
+                });
+            });
+     } else {
+        res.render('register', { });
+     }
 });
 
 //Post to the register page
@@ -31,7 +61,18 @@ router.post('/register', function(req, res) {
         }
         passport.authenticate('local')(req, res, function () {
             req.session.username = req.body.username;
-            res.render('choices', { username : req.session.username });
+            res.render('choices', { 
+                username : req.session.username,
+                menuItem: "choices",
+                accessLevel: req.session.accessLevel,
+                grindSelect: [
+                    { val:"extraCourse", text:"Extra Course" },
+                    { val:"mediumCourse", text:"Medium Course" },
+                    { val:"course", text:"Course" },
+                    { val:"fine", text:"Fine" },
+                    { val:"veryFine", text:"Very Fine"}
+                ] 
+            });
         });
     });
 });
@@ -55,39 +96,34 @@ router.get('/login', function(req, res) {
     res.render('login', { user : req.user });
 });
 
-router.post('/login', function(req, res, next) {
-
-    if (!req.body.getStarted){
-      passport.authenticate('local', function(err, user, info) {
-        if (err) {
-          return next(err); // will generate a 500 error
+router.post('/login', function (req, res, next){
+    passport.authenticate('local', function (err, user, info){
+        if(err){
+            return next(err);
         }
-        // Generate a JSON response reflecting authentication status
-        if (! user) {
-          return res.redirect('/login?failedlogin=1');
+
+        if(!user){
+            return res.redirect('login?failedlogin=1');
+        }
+        if(user){
+            passport.serializeUser(function (user, done){
+                done(null, user);
+            });
+            passport.deserializeUser(function (obj, done){
+                done(null, obj);
+            });
+            req.session.username = user.username;
         }
         if (user){
-            if (user.accessLevel == 5) {
+            if(user.accessLevel == 5) { //level 5 = Admin
                 req.session.accessLevel = "admin";
             }
             req.session.username = user.username;
-            
-            // Code for serializing
-            // // Passport session setup.
-            // passport.serializeUser(function(user, done) {
-            //   console.log("serializing " + user.username);
-            //   done(null, user);
-            // });
-
-            // passport.deserializeUser(function(obj, done) {
-            //   console.log("deserializing " + obj);
-            //   done(null, obj);
-            // });        
         }
 
-        return res.redirect('/choices');
-      })(req, res, next);
-    }
+        return res.redirect(req.session.route ? req.session.route : '/')
+
+    })(req, res, next);
 });
 
 /* ---------------------------- */
@@ -370,5 +406,20 @@ router.get('/email', function (req, res, next){
 
 router.get('/contact', function (req, res, next) {
     res.render("contact");
+});
+
+
+router.get('/admin', function (req, res, next){
+    if(req.session.accessLevel == "Admin"){
+
+        Account.find({}, function (err, doc, next){
+            
+            res.render('admin', {accounts: doc});
+        });
+    }else{
+        //Goodbye.
+        res.redirect('/');
+
+    }
 });
 module.exports = router;
