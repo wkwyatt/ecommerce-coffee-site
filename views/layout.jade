@@ -25,18 +25,19 @@ html
 						#nav-log-in Welcome,
 							a(href="/myaccount") #{username}
 							a.btn.btn-primary(href="/logout") Logout
+							if (accessLevel)
 
 		if (username)
 			#signup-wrapper
 				.container
 					ul.signup-progress
-						li
+						li(class=(menuItem == "home" ? "active" : ""))
 							a(href="/").welcome 1. Welcome
-						li.active
+						li(class=(menuItem == "choices" ? "active" : ""))
 							a(href="/choices").options 2. Options
-						li
+						li(class=(menuItem == "delivery" ? "active" : ""))
 							a(href="/delivery").delivery  3. Delivery
-						li
+						li(class=(menuItem == "payment" ? "active" : ""))
 							a(href="/payment").payment 4. Payment
 
 		block content

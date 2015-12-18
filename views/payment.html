@@ -1,11 +1,12 @@
-<form action="" method="POST">
+<form action="/payment" method="POST">
   <script
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
     data-key="pk_test_BcxEf8lyuiNmqpuf6XYUTy2m"
-    data-amount="2000"
+    data-amount="#{orderAmount}"
     data-name="Demo Site"
-    data-description="2 widgets ($20.00)"
+    data-description="2 widgets ($#{orderAmount})"
     data-image="/128x128.png"
     data-locale="auto">
   </script>
+
 </form>

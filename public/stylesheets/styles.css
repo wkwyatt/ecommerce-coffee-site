@@ -675,6 +675,18 @@ h2.how-it-works_label {
   width: 120px;
 }
 
+/* line 8, ../../compass/sass/views/_payment.scss */
+#payment h3 a {
+  font-size: 14px;
+  margin-left: 50px;
+}
+/* line 13, ../../compass/sass/views/_payment.scss */
+#payment #payment-order-labels, #payment #payment-address-labels, #payment #payment-order-values, #payment #payment-address-values {
+  display: inline-block;
+  width: 200px;
+  margin-right: 35px;
+}
+
 /* line 8, ../../compass/sass/views/_account.scss */
 #account #account-choices-header a, #account #account-delivery-info-header a {
   font-size: 14px;

@@ -4,7 +4,38 @@ block content
 
 	#payment.container
 		#payment-wrapper
+			- console.log(orderAmount);
 			h1#payment-header Payment
 			#payment-info.section
 				h2 Your Order Summary
-			include payment.html
+				h3 Order
+					a(href="/choices") (Edit)
+				#payment-order-labels
+					#payment-user-grind Grind
+					#payment-user-frequency Frequency
+					#payment-user-pounds Pounds
+				#payment-order-values
+					#payment-user-grind #{grind}
+					#payment-user-frequency #{frequency}
+					#payment-user-pounds #{pounds}
+				h3 Address 
+					a(href="/delivery") (Edit)
+				#payment-address-labels
+					#payment-user-name Full Name
+					#payment-user-add1 Address 
+					#payment-user-add2  
+					#payment-user-city City
+					#payment-user-state State
+					#payment-user-zip Zipcode
+					#payment-user-delivery Delivery Date
+				#payment-address-values
+					#payment-user-name #{fullName}
+					#payment-user-add1 #{addressOne}
+					#payment-user-add2 #{addressTwo}
+					#payment-user-city #{city}
+					#payment-user-state #{state}
+					#payment-user-zip #{zipcode}
+					#payment-user-delivery #{deliveryDate}
+			if (ready)
+				form(action='/payment', method='POST')
+					script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_BcxEf8lyuiNmqpuf6XYUTy2m', data-amount='#{orderAmount}', data-name='Demo Site', data-description='2 widgets ($#{orderAmountDec})', data-image='/128x128.png', data-locale='auto')

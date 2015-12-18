@@ -8,7 +8,7 @@ block content
 			#account-info.section
 				#account-choices
 					h2#account-choices-header Choices
-						a(href="#") (Edit)
+						a(href="/choices") (Edit)
 					#account-grind-labels
 						#account-grind Grind
 						#account-frequency Freq
@@ -20,15 +20,15 @@ block content
 						#account-user-pounds #{pounds}
 				#account-delivery-info
 					h2#account-delivery-info-header Delivery Information
-						a(href="#") (Edit)
+						a(href="/delivery") (Edit)
 					#account-delivery-labels
-						#account-name fullName
-						#account-add1 addressOne
-						#account-add2 addressTwo
-						#account-city newCity
-						#account-state state
-						#account-zip zipcode
-						#account-delivery deliveryDate
+						#account-name Full Name
+						#account-add1 Address 
+						#account-add2 
+						#account-city City
+						#account-state State
+						#account-zip Zipcode
+						#account-delivery Delivery Date
 					#account-delivery-uservals
 						#account-user-name #{fullName}
 						#account-user-add1 #{addressOne}
@@ -37,3 +37,4 @@ block content
 						#account-user-state #{state}
 						#account-user-zip #{zipcode}
 						#account-user-delivery #{deliveryDate}
+			input.btn.btn-danger.btn-lg(type="submit", value="Cancel Account", name="submit")

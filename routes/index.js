@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var nodeMailer = require('nodemailer');
+var stripe = require('stripe')("sk_test_ZTHgOGDFSTgCoyatqVuVD0PS");
 //Require our account.js file which resides in models one dir up
 var Account = require('../models/account');
 var router = express.Router();
@@ -9,7 +10,7 @@ var vars = require('../config/vars.json');
 /* GET home page. */
 router.get('/', function (req, res) {
     //res.send(req.session);
-    res.render('index', { username : req.session.username });
+    res.render('index', { username : req.session.username, menuItem: "home" });
 });
 
 ////////////////////////////////////////
@@ -56,19 +57,6 @@ router.get('/login', function(req, res) {
 
 router.post('/login', function(req, res, next) {
 
-    if(req.body.getStarted){
-        Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-            if (err) {
-                return res.render('register', { err : err });
-            }
-            if(!err)
-            passport.authenticate('local')(req, res, function () {
-                req.session.username = req.body.username;
-                res.render('choices', { username : req.session.username });
-            });
-        });        
-    }
-
     if (!req.body.getStarted){
       passport.authenticate('local', function(err, user, info) {
         if (err) {
@@ -79,17 +67,22 @@ router.post('/login', function(req, res, next) {
           return res.redirect('/login?failedlogin=1');
         }
         if (user){
-            // Passport session setup.
-            passport.serializeUser(function(user, done) {
-              console.log("serializing " + user.username);
-              done(null, user);
-            });
-
-            passport.deserializeUser(function(obj, done) {
-              console.log("deserializing " + obj);
-              done(null, obj);
-            });        
+            if (user.accessLevel == 5) {
+                req.session.accessLevel = "admin";
+            }
             req.session.username = user.username;
+            
+            // Code for serializing
+            // // Passport session setup.
+            // passport.serializeUser(function(user, done) {
+            //   console.log("serializing " + user.username);
+            //   done(null, user);
+            // });
+
+            // passport.deserializeUser(function(obj, done) {
+            //   console.log("deserializing " + obj);
+            //   done(null, obj);
+            // });        
         }
 
         return res.redirect('/choices');
@@ -123,6 +116,8 @@ router.get('/choices', function (req, res, next){
                 // Render the choices view
                 res.render('choices', { 
                     username: req.session.username,
+                    menuItem: "choices",
+                    accessLevel: req.session.accessLevel,
                     grind: currGrind,
                     frequency: currFrequency,
                     pounds: currPounds,
@@ -194,6 +189,7 @@ router.get('/delivery', function(req, res, next){
                 console.log("==index==");
                 res.render('delivery', {
                     username: req.session.username,
+                    menuItem: "delivery",
                     fullName : currFullName,
                     addressOne : currAddressOne,
                     addressTwo : currAddressTwo,
@@ -282,7 +278,66 @@ router.get('/myaccount', function (req, res, next){
 })
 
 router.get('/payment', function (req, res, next){
-    res.render('payment');
+    if (req.session.username) {
+        Account.findOne({ username: req.session.username },
+            function (err, doc){
+                var currFullName = doc.fullName ? doc.fullName : undefined;
+                var currAddressOne = doc.addressOne ? doc.addressOne : undefined;
+                var currAddressTwo = doc.addressTwo ? doc.addressTwo : undefined;
+                var currNewCity = doc.newCity ? doc.newCity : undefined;
+                var currState = doc.state ? doc.state : undefined;
+                var currZipcode = doc.zipcode ? doc.zipcode : undefined;
+                var currDeliveryDate = doc.deliveryDate ? doc.deliveryDate : undefined; 
+                var currGrind = doc.grind ? doc.grind : undefined;
+                var currFrequency = doc.frequency ? doc.frequency : undefined;
+                var currPounds = doc.pounds ? doc.pounds : undefined;
+
+                if (currFullName && currAddressOne && currAddressTwo && currNewCity && currState && currZipcode && currDeliveryDate && currGrind && currFrequency && currPounds) {
+                    var paymentReady = true;
+                }
+
+                req.session.orderAmount = 4500
+                req.session.orderAmountDec = 45.00
+                res.render('payment', {
+                    username: req.session.username,
+                    menuItem: "payment",
+                    fullName : currFullName,
+                    addressOne : currAddressOne,
+                    addressTwo : currAddressTwo,
+                    city : currNewCity,
+                    state : currState,
+                    zipcode : currZipcode,
+                    deliveryDate : currDeliveryDate,
+                    grind: currGrind,
+                    frequency: currFrequency,
+                    pounds: currPounds,
+                    orderAmount: req.session.orderAmount,
+                    orderAmountDec: req.session.orderAmountDec,
+                    ready: paymentReady
+                });
+            });
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+router.post('/payment', function (req, res, next){
+    // res.json(req.body);
+
+    stripe.charges.create({
+        amount: req.session.orderAmount,
+        currency: "usd",
+        source: req.body.stripeToken,
+        description: "Charge for " + req.body.stripeEmail
+    }, function (err, charge){
+        console.log(charge);
+        if(err) {
+            res.send("you got an error " + err);
+        } else {
+            res.redirect('/thankyou');
+        }
+    })
 });
 
 router.get('/email', function (req, res, next){
@@ -292,6 +347,28 @@ router.get('/email', function (req, res, next){
             user: vars.email,
             pass: vars.password
         }
+    });
+    var text = "test email"
+    var mailOptions = {
+        from: "William Wyatt <wkwyatt1@gmail.com>",
+        to: "Will Wyatt <wyatt_william@columbusstate.edu>",
+        subject: "this is a subject",
+        text: text
+    }
+
+    transporter.sendMail(mailOptions, function (error, info){
+        if (error) {
+            console.log(error);
+            res.json({response: error});
+        } else {
+            console.log("Messages was successfully sent.  Message was " + info.response);
+            res.json({response: "success"});
+        }
     })
-})
+});
+
+
+router.get('/contact', function (req, res, next) {
+    res.render("contact");
+});
 module.exports = router;

@@ -3,3 +3,16 @@
 // Payment View Styles
 // -------------------------------
 
+#payment {
+	h3 {
+		a {
+			font-size: 14px;
+			margin-left: 50px;
+		}
+	}
+	#payment-order-labels, #payment-address-labels, #payment-order-values, #payment-address-values{
+		display: inline-block;
+		width: 200px;
+		margin-right: 35px;
+	}
+}

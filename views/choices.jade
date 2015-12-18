@@ -42,10 +42,11 @@ block content
 							.choice-lower-text-wrapper
 								.choice-lower-text How do you like your grinds?
 								select#grinds.form-control(name="grind")
-									each item in grindSelect
-										if (item.val == grind)
-											option(value="#{item.val}" selected="selected") #{item.text}
-										else 
-											option(value="#{item.val}") #{item.text}
+									if (grind != undefined)
+										each item in grindSelect
+											if (item.val == grind)
+												option(value="#{item.val}" selected="selected") #{item.text}
+											else 
+												option(value="#{item.val}") #{item.text}
 								.choice-help-text You can cancel anytime.  You can skip anytime.
 				input.btn.btn-primary.btn-lg(type="submit", name="submit")
