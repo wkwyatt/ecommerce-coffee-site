@@ -12,7 +12,7 @@ var stripe = require("stripe")(
 /* GET home page. */
 router.get('/', function (req, res, next) {
     //res.send(req.session);
-    res.render('index', { username : req.session.username });
+    res.render('index', { username : req.session.username, menuItem: 'welcome' });
 });
 
 ////////////////////////////////////////
@@ -109,7 +109,7 @@ router.get('/choices', function (req, res, next){
 				var curFreq = doc.frequency;
 				var currGrind = doc.grind
 				//Render the choices view
-				res.render('choices', {username: req.session.username, accessLevel: req.session.accessLevel, pounds: currPounds, grind: currGrind, frequency: curFreq});
+				res.render('choices', {username: req.session.username, accessLevel: req.session.accessLevel, menuItem: 'options', pounds: currPounds, grind: currGrind, frequency: curFreq});
 			});
 	}else{
 		res.redirect('/');
@@ -156,7 +156,8 @@ router.get('/delivery', function (req, res, next){
                 city: city,
                 state: state,
                 zip: zip,
-                nextDelivery: nextDelivery
+                nextDelivery: nextDelivery, 
+                menuItem: 'delivery'
             });
         });
     }    
@@ -186,7 +187,8 @@ router.get('/payment', function (req, res, next){
                 city: city,
                 state: state,
                 zip: zip,
-                nextDelivery: nextDelivery
+                nextDelivery: nextDelivery,
+                menuItem: 'payment'
             });
         });
     }else{
