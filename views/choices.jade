@@ -1,40 +1,56 @@
 extends layout
 
 block content
-
 	#choices.container
+		h1 #{access}
 		#plan-wrapper
-			#choices-header Tell us what you want!!
-			#choices-sub-header Shipping is free and you can skip any week.
-			form(name="choices-form", action="/contact", method="post")
-				#choices-quantity.choices-block
+			#choices-header Tell us what you want!
+			#chioces-sub-header Shipping is free and you can skip any week.
+			form(name="choices-form" action="/choices", method="post")
+				#choice-frequency
 					.row
 						.choices-image.col-sm-6
-							img(src='/images/food-scale.png')
+							img(src="/images/calendar.png")
 						.col-sm-6
-							h2.choices-label 2. Quantity
+							h2.choices-label 1. Frequency
 							.choices-lower-text-wrapper
-								.choices-lower-text How many pounds (in increments of .25 lb) would you like each delivery?
-									input(type="text", name="emailAddress")
-									input(type="text", name="name")
-									input(type="text", name="messageBody")
-									input(type="text", name="subject")
-								.choices-help-text You can cancel anytime You can skip anytime.
+								.choices-lower-text How often would you like us to send you your coffee?
 
-				#choices-grind.choices-block
+								select(id="frequency" name="frequency" class="form-control")
+									option(value="weekly", selected=(frequency == 'weekly')) Weekly
+									option(value="semiweekly", selected=(frequency == 'semiweekly')) Every Two Weeks
+									option(value="monthly", selected=(frequency == 'monthly')) Monthly
+									option(value="quarterly", selected=(frequency == 'quarterly')) Quarterly
+									option(value="semi-annually", selected=(frequency == 'semi-annually')) Semi-Annually
+									option(value="annually", selected=(frequency == 'annually')) Annually
+									//-Format for when we pull in json
+									//-{"books": ["A", "B", "C"]}
+									//- each book, i in books
+									//- 	option(value=i) Book #{book}
+								.choices-nocommitment.help-block You can cancel anytime. You can skip anytime.
+				#choice-quantity
 					.row
 						.choices-image.col-sm-6
-							img(src='/images/beans.png')
+							img(src="/images/food-scale.png")
 						.col-sm-6
-							h2.choices-label 3. Grind Type
+							h2.choices-label 2.Quantity
+							.choices-lower-text How many pounds (in increments of .25 lb) would you like each delivery?
+							input(type="text", name="pounds" value=pounds class="form-control")
 							.choices-lower-text-wrapper
-								.choices-lower-text How do you like your grinds?
-								select(id="grind", name="grind", class="form-control")
-									option(value="extraCourse") Extra Course
-									option(value="course") Course
-									option(value="mediumCourse") Medium Course
-									option(value="fine") Fine
-									option(value="veryFine") Very Fine
-								.choices-help-text You can cancel anytime You can skip anytime.
+								.choices-nocommitment.help-block You can cancel anytime. You can skip anytime.
+				#choices-grind
+					.row
+						.choices-image.col-sm-6
+							img(src="/images/beans.png")
+						.col-sm-6
+							h2.choices-label 3. Grind type
+							.choices-lower-text How do your like your grinds?
+							select(id="grind" name="grind" class="form-control")
+								option(value="extra-course", selected=(grind == 'extra-course')) Extra Course
+								option(value="course", selected=(grind == 'course')) Course
+								option(value="medium-coarse", selected=(grind == 'medium-coarse')) Medium Course
+								option(value="fine", selected=(grind == 'fine')) Fine
+								option(value="very-fine", selected=(grind == 'very-fine')) Very Fine
+							.choices-nocommitment.help-block You can cancel anytime. You can skip anytime.
 				input.btn.btn-primary.btn-lg(type="submit", name="submit")
 

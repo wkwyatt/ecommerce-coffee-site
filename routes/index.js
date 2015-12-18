@@ -75,6 +75,9 @@ router.post('/login', function(req, res, next) {
           return res.redirect('/login?failedlogin=1');
         }
         if (user){
+        	if(user.accessLevel == 5) { //level 5 = Admin
+        		req.session.accessLevel = "Admin";
+        	}
             req.session.username = user.username;
         }
 
@@ -106,7 +109,7 @@ router.get('/choices', function (req, res, next){
 				var curFreq = doc.frequency;
 				var currGrind = doc.grind
 				//Render the choices view
-				res.render('choices', {username: req.session.username, pounds: currPounds, grind: currGrind, frequency: curFreq});
+				res.render('choices', {username: req.session.username, accessLevel: req.session.accessLevel, pounds: currPounds, grind: currGrind, frequency: curFreq});
 			});
 	}else{
 		res.redirect('/');
@@ -186,11 +189,91 @@ router.get('/payment', function (req, res, next){
                 nextDelivery: nextDelivery
             });
         });
-    }    
-    if(!req.session.username){
+    }else{
         //The user is not logged in. Send them to the login page.
         res.redirect('/login');
     }    
+});
+
+router.post('/delivery', function (req, res, next){
+	if(req.session.username){
+            var fullName = req.body.fullName;
+            var address1 = req.body.address1;
+            var address2 = req.body.address2;
+            var city = req.body.city;
+            var state = req.body.state;
+            var zip = req.body.zip;
+            var nextDelivery = req.body.mdate;
+
+			var query = {username: req.session.username};
+			var update = {
+				fullName: req.body.fullName,
+				address1: req.body.address1,
+				address2: req.body.address2,
+				city: req.body.city,
+				state: req.body.state,
+				zip: req.body.zip,
+				nextDelivery: req.body.nextDelivery
+			};
+			var options = {upsert: true};
+			Account.findOneAndUpdate(query, update, options, function(err, account) {
+			  if (err) {
+			    console.log('There was an error saving your preferences. Please re-enter or send this error to our help team: ' + err );
+			  }else{
+			  	account.save;
+			  }
+			});
+
+            //Update name, if it's set
+            if(fullName){
+                Account.findOneAndUpdate({"username": req.session.username}, {fullName:fullName}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            }
+            //Update address1, if it's set
+            if(address1){
+                Account.findOneAndUpdate({"username": req.session.username}, {address1:address1}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            }
+            //Update address2, if it's set        
+            if(address2){
+                Account.findOneAndUpdate({"username": req.session.username}, {address2:address2}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            }
+            //Update city, if it's set        
+            if(city){
+                Account.findOneAndUpdate({"username": req.session.username}, {city:city}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            } 
+            //Update state, if it's set        
+            if(state){
+                Account.findOneAndUpdate({"username": req.session.username}, {state:state}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            }        
+            //Update zip, if it's set        
+            if(zip){
+                Account.findOneAndUpdate({"username": req.session.username}, {zip:zip}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            }
+            //Update nextOrderDate, if it's set        
+            if(nextDelivery){
+                // Order.findOneAndUpdate({"username": req.session.username}, {nextOrderDate:nextDelivery}, {upsert: true}, function(err, account) { /*Error Handling */ });
+                Account.findOneAndUpdate({"username": req.session.username}, {nextOrderDate:nextDelivery}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            }               
+            //Finished updating the DB. Now render the page.loc
+        //Get their account record so we can display it
+            Account.findOne({ "username": req.session.username}, function (err, doc, next){
+                res.render( 'payment', {
+                    username : req.session.username,
+                    grind: doc.grind,
+                    frequency: doc.frequency,
+                    pounds: doc.pounds,
+                    fullName: doc.fullName,
+                    address1: doc.address1,
+                    address2: doc.address2,
+                    city: doc.city,
+                    state: doc.state,
+                    zip: doc.zip,
+                    nextDelivery: doc.nextOrderDate
+                });
+            });
+    }else{
+        //The user is not logged in. Send them to the login page.
+        res.redirect('/login');
+    }
 });
 
 router.get('/email', function (req, res, next){
@@ -222,25 +305,43 @@ router.get('/email', function (req, res, next){
 });
 
 router.post('/payment', function(req, res, next){
-		stripe.charges.create({
-		  amount: 400,
-		  currency: "usd",
-		  source: req.body.stripeToken, // obtained with Stripe.js
-		  description: "Charge for " + req.body.stripeEmail
-		}, function(err, charge) {
-		  // asynchronously called
-		  console.log(charge)
-		  if(err){
-		  	res.send('you got an error.' + err)
-		  }else{
-		  	res.redirect('/thankyou')
-		  }
-		});
+	stripe.charges.create({
+	  amount: 400,
+	  currency: "usd",
+	  source: req.body.stripeToken, // obtained with Stripe.js
+	  description: "Charge for " + req.body.stripeEmail
+	}, function(err, charge) {
+	  // asynchronously called
+	  console.log(charge)
+	  if(err){
+	  	res.send('you got an error.' + err)
+	  }else{
+	  	res.redirect('/thankyou')
+	  }
+	});
 });
 
 
 router.get('/contact', function(req, res, next){
 	res.render('contact');
+});
+
+router.get('/thankyou', function(req, res, next){
+	res.render('thankyou');
+});
+
+router.get('/admin', function (req, res, next){
+	if(req.session.accessLevel == "Admin"){
+
+		Account.find({}, function (err, doc, next){
+			
+			res.render('admin', {accounts: doc});
+		});
+	}else{
+		//Goodbye.
+		res.redirect('/');
+
+	}
 });
 
 module.exports = router;
