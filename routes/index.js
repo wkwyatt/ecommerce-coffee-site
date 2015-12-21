@@ -12,7 +12,7 @@ var stripe = require("stripe")(
 /* GET home page. */
 router.get('/', function (req, res, next) {
     //res.send(req.session);
-    res.render('index', { username : req.session.username, menuItem: 'welcome' });
+    res.render('index', { username : req.session.username, menuItem: 'home' });
 });
 
 ////////////////////////////////////////
@@ -112,7 +112,7 @@ router.get('/choices', function (req, res, next){
 				res.render('choices', {
                     username: req.session.username, 
                     accessLevel: req.session.accessLevel, 
-                    menuItem: 'options', 
+                    menuItem: 'choices', 
                     pounds: currPounds, 
                     grind: currGrind, 
                     frequency: curFreq,
@@ -160,9 +160,9 @@ router.get('/delivery', function (req, res, next){
             var address1 = doc.address1 ? doc.address1 : undefined;
             var address2 = doc.address2 ? doc.address2 : undefined;
             var city = doc.city ? doc.city : undefined;
-            var state = doc.city ? doc.state : undefined;
+            var state = doc.state ? doc.state : undefined;
             var zip = doc.zip ? doc.zip : undefined;
-            var nextDelivery = doc.nextOrderDate ? doc.nextOrderDate : undefined
+            var nextDelivery = doc.nextDelivery ? doc.nextDelivery : undefined
             res.render( 'delivery', {
                 username: req.session.username,
                 fullName: fullName,
@@ -193,9 +193,19 @@ router.get('/payment', function (req, res, next){
             var city = doc.city ? doc.city : undefined;
             var state = doc.city ? doc.state : undefined;
             var zip = doc.zip ? doc.zip : undefined;
-            var nextDelivery = doc.nextOrderDate ? doc.nextOrderDate : undefined
+            var grind = doc.grind ? doc.grind : undefined;
+            var frequency = doc.frequency ? doc.frequency : undefined;
+            var pounds = doc.pounds ? doc.pounds : undefined;
+            var nextDelivery = doc.nextDelivery ? doc.nextDelivery : undefined
+
+            if (fullName && address1 && city && state && zip && nextDelivery && grind && frequency && pounds) {
+                    var paymentReady = true;
+                }
             res.render( 'payment', {
                 username: req.session.username,
+                grind: grind,
+                frequency: frequency,
+                pounds: pounds,
                 fullName: fullName,
                 address1: address1,
                 address2: address2,
@@ -203,6 +213,7 @@ router.get('/payment', function (req, res, next){
                 state: state,
                 zip: zip,
                 nextDelivery: nextDelivery,
+                ready: paymentReady,
                 menuItem: 'payment'
             });
         });
@@ -230,61 +241,83 @@ router.post('/delivery', function (req, res, next){
 				city: req.body.city,
 				state: req.body.state,
 				zip: req.body.zip,
-				nextDelivery: req.body.nextDelivery
+				nextDelivery: req.body.mdate
 			};
+
+            console.log("++++++update++++++++++");
+            console.log(update);
+            console.log("=====================");
 			var options = {upsert: true};
 			Account.findOneAndUpdate(query, update, options, function(err, account) {
 			  if (err) {
 			    console.log('There was an error saving your preferences. Please re-enter or send this error to our help team: ' + err );
 			  }else{
+                console.log('we posted it');
 			  	account.save;
 			  }
 			});
 
             //Update name, if it's set
-            if(fullName){
-                Account.findOneAndUpdate({"username": req.session.username}, {fullName:fullName}, {upsert: true}, function(err, account) { /*Error Handling */ });
-            }
-            //Update address1, if it's set
-            if(address1){
-                Account.findOneAndUpdate({"username": req.session.username}, {address1:address1}, {upsert: true}, function(err, account) { /*Error Handling */ });
-            }
-            //Update address2, if it's set        
-            if(address2){
-                Account.findOneAndUpdate({"username": req.session.username}, {address2:address2}, {upsert: true}, function(err, account) { /*Error Handling */ });
-            }
-            //Update city, if it's set        
-            if(city){
-                Account.findOneAndUpdate({"username": req.session.username}, {city:city}, {upsert: true}, function(err, account) { /*Error Handling */ });
-            } 
-            //Update state, if it's set        
-            if(state){
-                Account.findOneAndUpdate({"username": req.session.username}, {state:state}, {upsert: true}, function(err, account) { /*Error Handling */ });
-            }        
-            //Update zip, if it's set        
-            if(zip){
-                Account.findOneAndUpdate({"username": req.session.username}, {zip:zip}, {upsert: true}, function(err, account) { /*Error Handling */ });
-            }
-            //Update nextOrderDate, if it's set        
-            if(nextDelivery){
-                // Order.findOneAndUpdate({"username": req.session.username}, {nextOrderDate:nextDelivery}, {upsert: true}, function(err, account) { /*Error Handling */ });
-                Account.findOneAndUpdate({"username": req.session.username}, {nextOrderDate:nextDelivery}, {upsert: true}, function(err, account) { /*Error Handling */ });
-            }               
+            // if(fullName){
+            //     Account.findOneAndUpdate({"username": req.session.username}, {fullName:fullName}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            // }
+            // //Update address1, if it's set
+            // if(address1){
+            //     Account.findOneAndUpdate({"username": req.session.username}, {address1:address1}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            // }
+            // //Update address2, if it's set        
+            // if(address2){
+            //     Account.findOneAndUpdate({"username": req.session.username}, {address2:address2}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            // }
+            // //Update city, if it's set        
+            // if(city){
+            //     Account.findOneAndUpdate({"username": req.session.username}, {city:city}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            // } 
+            // //Update state, if it's set        
+            // if(state){
+            //     Account.findOneAndUpdate({"username": req.session.username}, {state:state}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            // }        
+            // //Update zip, if it's set        
+            // if(zip){
+            //     Account.findOneAndUpdate({"username": req.session.username}, {zip:zip}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            // }
+            // //Update nextOrderDate, if it's set        
+            // if(nextDelivery){
+            //     // Order.findOneAndUpdate({"username": req.session.username}, {nextOrderDate:nextDelivery}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            //     Account.findOneAndUpdate({"username": req.session.username}, {nextOrderDate:nextDelivery}, {upsert: true}, function(err, account) { /*Error Handling */ });
+            // }               
             //Finished updating the DB. Now render the page.loc
         //Get their account record so we can display it
             Account.findOne({ "username": req.session.username}, function (err, doc, next){
+                var fullName = doc.fullName ? doc.fullName : undefined;
+                var address1 = doc.address1 ? doc.address1 : undefined;
+                var address2 = doc.address2 ? doc.address2 : undefined;
+                var city = doc.city ? doc.city : undefined;
+                var state = doc.city ? doc.state : undefined;
+                var zip = doc.zip ? doc.zip : undefined;
+                var grind = doc.grind ? doc.grind : undefined;
+                var frequency = doc.frequency ? doc.frequency : undefined;
+                var pounds = doc.pounds ? doc.pounds : undefined;
+                var nextDelivery = doc.nextDelivery ? doc.nextDelivery : undefined
+
+                if (fullName && address1 && city && state && zip && nextDelivery && grind && frequency && pounds) {
+                    var paymentReady = true;
+                }
+
                 res.render( 'payment', {
                     username : req.session.username,
-                    grind: doc.grind,
-                    frequency: doc.frequency,
-                    pounds: doc.pounds,
-                    fullName: doc.fullName,
-                    address1: doc.address1,
-                    address2: doc.address2,
-                    city: doc.city,
-                    state: doc.state,
-                    zip: doc.zip,
-                    nextDelivery: doc.nextOrderDate
+                    grind: grind,
+                    frequency: frequency,
+                    pounds: pounds,
+                    fullName: fullName,
+                    address1: address1,
+                    address2: address2,
+                    city: city,
+                    state: state,
+                    zip: zip,
+                    nextDelivery: nextDelivery,
+                    ready: paymentReady,
+                    menuItem: 'payment'
                 });
             });
     }else{

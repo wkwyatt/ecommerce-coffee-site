@@ -10,12 +10,12 @@ var Account = new Schema({
 	frequency: String,
 	pounds: Number,
 	fullName: String,
-	addressOne: String,
-	addressTwo: String,
-	newCity: String,
+	address1: String,
+	address2: String,
+	city: String,
 	state: String,
-	zipcode: Number,
-	deliveryDate: String
+	zip: Number,
+	nextDelivery: String
 });
 
 Account.plugin(passportLocalMongoose);
