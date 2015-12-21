@@ -109,7 +109,22 @@ router.get('/choices', function (req, res, next){
 				var curFreq = doc.frequency;
 				var currGrind = doc.grind
 				//Render the choices view
-				res.render('choices', {username: req.session.username, accessLevel: req.session.accessLevel, menuItem: 'options', pounds: currPounds, grind: currGrind, frequency: curFreq});
+				res.render('choices', {
+                    username: req.session.username, 
+                    accessLevel: req.session.accessLevel, 
+                    menuItem: 'options', 
+                    pounds: currPounds, 
+                    grind: currGrind, 
+                    frequency: curFreq,
+                    grindSelect: [
+                        { val:"extraCourse", text:"Extra Course" },
+                        { val:"mediumCourse", text:"Medium Course" },
+                        { val:"course", text:"Course" },
+                        { val:"fine", text:"Fine" },
+                        { val:"veryFine", text:"Very Fine"}
+                    ]
+
+                });
 			});
 	}else{
 		res.redirect('/');

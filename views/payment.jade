@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 extends layout
 
 block content
@@ -31,50 +31,12 @@ block content
 					#payment-user-delivery Delivery Date
 				#payment-address-values
 					#payment-user-name #{fullName}
-					#payment-user-add1 #{addressOne}
-					#payment-user-add2 #{addressTwo}
+					#payment-user-add1 #{address1}
+					#payment-user-add2 #{address2}
 					#payment-user-city #{city}
 					#payment-user-state #{state}
-					#payment-user-zip #{zipcode}
-					#payment-user-delivery #{deliveryDate}
+					#payment-user-zip #{zip}
+					#payment-user-delivery #{nextDelivery}
 			if (ready)
 				form(action='/payment', method='POST')
 					script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_BcxEf8lyuiNmqpuf6XYUTy2m', data-amount='#{orderAmount}', data-name='Demo Site', data-description='2 widgets ($#{orderAmountDec})', data-image='/128x128.png', data-locale='auto')
-||||||| merged common ancestors
-=======
-extends layout
-
-block content
-	.container
-		#plan-wrapper
-			h1 Payment
-			p Please enter your payment info
-
-			.form-inner
-				if (grind)
-					#order-summary
-						#summary-title Your Order Summary:
-						ul
-							li Shipping Date: #{nextDelivery}
-							li Grind Preferrence: #{grind}
-							li Order frequency: #{frequency}
-							li Ammount (in lbs): #{pounds}
-						ul
-							li.header Shipping address
-							li Name: #{fullName}
-							li Address: #{address1}
-							if (address2)
-								li Address: #{address2}
-							li City: #{city}
-							li State: #{state}
-							li Zip: #{zip}
-						#pay-with-card
-							
-				if (!grind)
-					#no-order
-						#pay-with-card
-							p We will use your current settings to update your payment info.
-							br
-							include payment.html
-
->>>>>>> master
