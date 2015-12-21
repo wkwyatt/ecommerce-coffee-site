@@ -75,6 +75,9 @@ router.post('/login', function(req, res, next) {
           return res.redirect('/login?failedlogin=1');
         }
         if (user){
+            console.log("=======admin========");
+            console.log(user.accessLevel);
+            console.log(user);
         	if(user.accessLevel == 5) { //level 5 = Admin
         		req.session.accessLevel = "Admin";
         	}
