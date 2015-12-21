@@ -6,7 +6,7 @@ var router = express.Router();
 var nodemailer = require('nodemailer');
 // var vars = require('../config/vars.json');
 var stripe = require("stripe")(
-  "sk_test_kRmqYSFSriTO5n2dj7CrLBRI"
+  "sk_test_ZTHgOGDFSTgCoyatqVuVD0PS"
 );
 
 /* GET home page. */
