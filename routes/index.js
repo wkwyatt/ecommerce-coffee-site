@@ -380,6 +380,41 @@ router.get('/thankyou', function(req, res, next){
 	res.render('thankyou');
 });
 
+
+router.get('/account', function (req, res, next){
+    if (req.session.username) {
+        Account.findOne({ username: req.session.username },
+            function (err, doc){
+                var currFullName = doc.fullName ? doc.fullName : undefined;
+                var currAddressOne = doc.address1 ? doc.address1 : undefined;
+                var currAddressTwo = doc.address2 ? doc.address2 : undefined;
+                var currNewCity = doc.city ? doc.city : undefined;
+                var currState = doc.state ? doc.state : undefined;
+                var currZipcode = doc.zip ? doc.zip : undefined;
+                var currDeliveryDate = doc.nextDelivery ? doc.nextDelivery : undefined; 
+                var currGrind = doc.grind ? doc.grind : undefined;
+                var currFrequency = doc.frequency ? doc.frequency : undefined;
+                var currPounds = doc.pounds ? doc.pounds : undefined;
+
+                res.render('account', {
+                    username: req.session.username,
+                    fullName : currFullName,
+                    addressOne : currAddressOne,
+                    addressTwo : currAddressTwo,
+                    city : currNewCity,
+                    state : currState,
+                    zipcode : currZipcode,
+                    deliveryDate : currDeliveryDate,
+                    grind: currGrind,
+                    frequency: currFrequency,
+                    pounds: currPounds
+                });
+            });
+    } else {
+        res.redirect("/");
+    }
+})
+
 router.get('/admin', function (req, res, next){
 	if(req.session.accessLevel == "Admin"){
 
