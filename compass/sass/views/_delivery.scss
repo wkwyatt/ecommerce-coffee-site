@@ -1,0 +1,21 @@
+// -------------------------------
+// _DELIVERY.SCSS
+// Delivery View Styles
+// -------------------------------
+
+#delivery {
+	#delivery-wrapper {
+		#delivery-address-form-wrapper {
+			@include sectionWrapper($cream);
+			input {
+				width: 60%;
+			}
+			.delivery-input-subhead {
+				color: lighten(#000, 65%);
+			}
+			#zipcode, #delivery-date, select {
+				width: 120px;
+			}
+		}
+	}
+}

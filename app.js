@@ -7,8 +7,14 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var passportLocal = require('passport-local');
-var session = require('express-session');
 var LocalStrategy = passportLocal.Strategy;
+var session = require('express-session')
+
+var mongoUrl = 
+  process.env.MONGOLAB_URI ||
+  process.env.MONGOLAB_URL ||
+  'mongodb://localhost:27017/coffee';
+mongoose.connect(mongoUrl);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -26,23 +32,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  secret: 'digitalcrafts-coffee',
+  secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Passport Config
+//Passport Configuration
 var Account = require('./models/account');
 passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-// Mongoose
-mongoose.connect('mongodb://localhost:27017/coffee');
+//Mongoose
+// mongoose.connect('mongodb://localhost:27017/ecommerce')
 
 app.use('/', routes);
 app.use('/users', users);

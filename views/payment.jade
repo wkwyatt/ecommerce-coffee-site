@@ -1,0 +1,42 @@
+
+extends layout
+
+block content
+
+	#payment.container
+		#payment-wrapper
+			- console.log(orderAmount);
+			h1#payment-header Payment
+			#payment-info.section
+				h2 Your Order Summary
+				h3 Order
+					a(href="/choices") (Edit)
+				#payment-order-labels
+					#payment-user-grind(style=(grind == undefined ? "color: red;" : "")) Grind
+					#payment-user-frequency(style=(frequency == undefined ? "color: red;" : "")) Frequency
+					#payment-user-pounds(style=(pounds == undefined ? "color: red;" : "")) Pounds
+				#payment-order-values
+					#payment-user-grind #{(grind != undefined ? grind : 'Not Selected')}
+					#payment-user-frequency #{(frequency != undefined ? frequency : 'Not Selected')}
+					#payment-user-pounds #{(pounds != undefined ? pounds : 'Not Selected')}
+				h3 Address 
+					a(href="/delivery") (Edit)
+				#payment-address-labels
+					#payment-user-name(style=(fullName == undefined ? "color: red;" : "")) Full Name
+					#payment-user-add1(style=(address1 == undefined ? "color: red;" : "")) Address 
+					#payment-user-add2(style=(address2 == undefined ? "color: red;" : "")) Address2 
+					#payment-user-city(style=(city == undefined ? "color: red;" : "")) City
+					#payment-user-state(style=(state == undefined ? "color: red;" : "")) State
+					#payment-user-zip(style=(zip == undefined ? "color: red;" : "")) Zipcode
+					#payment-user-delivery(style=(nextDelivery == undefined ? "color: red;" : "")) Delivery Date
+				#payment-address-values
+					#payment-user-name #{(fullName != undefined ? fullName : 'Not Selected')}
+					#payment-user-add1 #{(address1 != undefined ? address1 : 'Not Selected')}
+					#payment-user-add2 #{(address2 != undefined ? address2 : 'Not Selected')}
+					#payment-user-city #{(city != undefined ? city : 'Not Selected')}
+					#payment-user-state #{(state != undefined ? state : 'Not Selected')}
+					#payment-user-zip #{(zip != undefined ? zip : 'Not Selected')}
+					#payment-user-delivery #{(nextDelivery != undefined ? nextDelivery : 'Not Selected')}
+			if (ready)
+				form(action='/payment', method='POST')
+					script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_BcxEf8lyuiNmqpuf6XYUTy2m', data-amount='#{orderAmount}', data-name='Demo Site', data-description='2 widgets ($#{orderAmountDec})', data-image='/128x128.png', data-locale='auto')

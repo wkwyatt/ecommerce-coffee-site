@@ -1,0 +1,40 @@
+extends layout
+
+block content
+
+	#account.container
+		#account-wrapper
+			h1#account-header Your account information
+			#account-info.section
+				#account-choices
+					h2#account-choices-header Choices
+						a(href="/choices") (Edit)
+					#account-grind-labels
+						#account-grind Grind
+						#account-frequency Freq
+						#account-pounds Pounds
+					#account-grind-uservals
+						- console.log(grind)
+						#account-user-grind #{grind}
+						#account-user-frequency #{frequency}
+						#account-user-pounds #{pounds}
+				#account-delivery-info
+					h2#account-delivery-info-header Delivery Information
+						a(href="/delivery") (Edit)
+					#account-delivery-labels
+						#account-name Full Name
+						#account-add1 Address 
+						#account-add2 
+						#account-city City
+						#account-state State
+						#account-zip Zipcode
+						#account-delivery Delivery Date
+					#account-delivery-uservals
+						#account-user-name #{fullName}
+						#account-user-add1 #{addressOne}
+						#account-user-add2 #{addressTwo}
+						#account-user-city #{city}
+						#account-user-state #{state}
+						#account-user-zip #{zipcode}
+						#account-user-delivery #{deliveryDate}
+			input.btn.btn-danger.btn-lg(type="submit", value="Cancel Account", name="submit")
