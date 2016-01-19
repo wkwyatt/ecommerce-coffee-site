@@ -1,0 +1,23 @@
+//  -------------------------------------------------
+//		 Main Style Page Holding all styling
+// --------------------------------------------------
+
+// CONFIG
+// ---------------------
+@import "config/vars";
+
+
+// LAYOUT
+// ---------------------
+@import "layout/layout";
+@import "layout/header";
+@import "layout/footer";
+
+
+// VIEWS
+// ---------------------
+@import "views/home";
+@import "views/subscribe";
+
+
+
